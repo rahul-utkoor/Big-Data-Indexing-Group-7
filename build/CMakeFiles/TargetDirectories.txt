@@ -1,0 +1,5 @@
+/home/rahul/Desktop/sem 7/big data indexing/code/build/CMakeFiles/edit_cache.dir
+/home/rahul/Desktop/sem 7/big data indexing/code/build/CMakeFiles/rebuild_cache.dir
+/home/rahul/Desktop/sem 7/big data indexing/code/build/src/CMakeFiles/edit_cache.dir
+/home/rahul/Desktop/sem 7/big data indexing/code/build/src/CMakeFiles/rebuild_cache.dir
+/home/rahul/Desktop/sem 7/big data indexing/code/build/src/CMakeFiles/LibGIST.dir
