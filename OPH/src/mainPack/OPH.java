@@ -8,7 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
+import binarySuperCategories.ActiveSets;
+import binarySuperCategories.HammingSuperCategories;
 import binarySuperCategories.SuperCategories;
 import features.Feature;
 import wInitialization.WMatrix;
@@ -25,8 +28,9 @@ public class OPH {
 	private static int max_inner_iter = 10;
 	private static int mini_batch_samples = 200;
 	private static double alpha;
-	
+	private static List<Integer> I_;
 	private static Map<Integer , SuperCategories > Categories;
+	private static Map<Integer , HammingSuperCategories > hamming_Categories;
 	private static List<Feature> input_features;
 	private static WMatrix w;
 	
@@ -49,11 +53,10 @@ public class OPH {
 		System.out.println("Dividing Input data into categories");
 		Categories = new HashMap<Integer , SuperCategories >();
 		for(int i = 0 ; i < N ; i++) {
-			SuperCategories sc;
-			sc = new SuperCategories(i , input_features , m , N , S);
+			SuperCategories sc = new SuperCategories(i , input_features , m , N , S);
 			Categories.put(i, sc);
 		}
-		
+		run_oph();
 		System.out.println("Program Execution Completed");
 		
 	}
@@ -68,7 +71,7 @@ public class OPH {
 			input_features = new ArrayList<Feature>();
 			Feature img_data = null;
 			while((line = br.readLine()) != null) {
-				img_data = new Feature(line);
+				img_data = new Feature(line , counter);
 				input_features.add(img_data);
 				counter++;
 			}
@@ -96,6 +99,56 @@ public class OPH {
 			}
 		}
 		return max_val;
+	}
+	
+	public static void run_oph() {
+		for(int i = 0 ; i < max_outer_iter ; i++) {
+			for(int j = 0 ; j < max_inner_iter ; j++) {
+				hamming_Categories = new HashMap<Integer , HammingSuperCategories >();
+				I_ = new ArrayList<Integer>();
+				I_ = generate_random_samples();
+				System.out.println(I_);
+				for(Integer x : I_) {
+					HammingSuperCategories hsc = new HammingSuperCategories(x , input_features , w , N , S , m , alpha);
+					hamming_Categories.put(x, hsc);
+					System.out.println(hamming_Categories.get(x).getEntry(0).size());
+				}
+				Map<Integer , ActiveSets> active_sets = new HashMap<Integer , ActiveSets>();
+				for(Integer x : I_) {
+					System.out.println("C size : " + Categories.get(x).getEntry(0) + " , hC size : " + hamming_Categories.get(x).getEntry(0));
+//					ActiveSets as = new ActiveSets(x , S , I_ , Categories , hamming_Categories);
+//					active_sets.put(x, as);
+				}
+				break;
+			}
+			break;
+		}
+	}
+	
+	public static List<Integer> generate_random_samples() {
+		List<Integer> temp = new ArrayList<Integer>();
+		Random rand = new Random();
+		int temp_var = 0;
+		for(int i = 0 ; i < mini_batch_samples ; i++) {
+			temp_var = rand.nextInt() % N;
+			if (temp_var < 0) {
+				if(!temp.contains(N + temp_var)) {
+					temp.add(N + temp_var);					
+				}
+				else {
+					i--;
+				}
+			}
+			else {
+				if(!temp.contains(temp_var)) {
+					temp.add(temp_var);					
+				}
+				else {
+					i--;
+				}
+			}
+		}
+		return temp;
 	}
 
 }

@@ -5,7 +5,9 @@ import java.util.List;
 
 public class Feature {
 	List<Double> values;
-	public Feature(String str) {
+	public int index;
+	public Feature(String str , int index) {
+		this.index = index;
 		this.values = new ArrayList<>();
 		setFeatureVector(str);
 	}
