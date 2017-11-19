@@ -6,6 +6,7 @@ import java.util.Random;
 
 import features.Feature;
 
+//Intialiazing linear projection W of the hash functions.
 public class WMatrix {
 	private static int d;
 	private static int m;
@@ -27,14 +28,15 @@ public class WMatrix {
 			for(int j = 0 ; j < this.d ; j++) {
 				temp.add(randomGen());
 			}
+			// adding the genearted values to W matrix
 			this.W.add(temp);
 		}
 	}
-	
+	// genearting the random values from gaussian distribution
 	public double randomGen() {
 		return rand.nextGaussian();
 	}
-	
+	//normaliazing the w matrix
 	public void normalize() {
 		for(List<Double> sm : W) {
 			double norm = Math.sqrt(getNorm(sm));
@@ -45,7 +47,7 @@ public class WMatrix {
 			}
 		}
 	}
-	
+	//
 	public double getNorm(List<Double> sm) {
 		double norm = 0.0;
 		for(Double val : sm) {
@@ -53,7 +55,7 @@ public class WMatrix {
 		}
 		return norm;
 	}
-	
+	//
 	public double wTransposeX(int index , Feature f) {
 		double prod = 0.0;
 		List<Double> feature_values = f.getFeatureVector();
