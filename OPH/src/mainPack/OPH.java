@@ -17,6 +17,7 @@ import features.Feature;
 import wInitialization.WMatrix;
 
 public class OPH {
+	//All required parameters for OPH
 	private static int d;
 	private static int m;
 	private static int N;
@@ -43,6 +44,7 @@ public class OPH {
 		inputPath = args[1];
 		System.out.println("Reading Input file");
 		readFile(inputPath);
+		//creating the W of hash functions 
 		w = new WMatrix(d , m);
 		System.out.println("Initializing W matrix");
 		w.initializeMatrix();
@@ -60,14 +62,14 @@ public class OPH {
 		System.out.println("Program Execution Completed");
 		
 	}
-	
+	//
 	public static void readFile(String filePath) {
 		try {
 			InputStreamReader reader = new InputStreamReader(new FileInputStream(new File(filePath)), "UTF8");
 			BufferedReader br = new BufferedReader(reader);
 			String line;
 			int counter = 0;
-			
+			//extracting the input features from the images
 			input_features = new ArrayList<Feature>();
 			Feature img_data = null;
 			while((line = br.readLine()) != null) {
@@ -86,7 +88,7 @@ public class OPH {
 			e.printStackTrace();
 		}
 	}
-	
+	//
 	public static double maxZ() {
 		double al = 0.0;
 		double max_val = -10000;
@@ -100,12 +102,14 @@ public class OPH {
 		}
 		return max_val;
 	}
-	
+	//running the OPH algo
 	public static void run_oph() {
 		for(int i = 0 ; i < max_outer_iter ; i++) {
 			for(int j = 0 ; j < max_inner_iter ; j++) {
+				//
 				hamming_Categories = new HashMap<Integer , HammingSuperCategories >();
 				I_ = new ArrayList<Integer>();
+				//genearting mini batches randomly
 				I_ = generate_random_samples();
 				System.out.println(I_);
 				for(Integer x : I_) {
@@ -113,6 +117,7 @@ public class OPH {
 					hamming_Categories.put(x, hsc);
 					System.out.println(hamming_Categories.get(x).getEntry(0).size());
 				}
+				//creating Active sets
 				Map<Integer , ActiveSets> active_sets = new HashMap<Integer , ActiveSets>();
 				for(Integer x : I_) {
 					System.out.println("C size : " + Categories.get(x).getEntry(0) + " , hC size : " + hamming_Categories.get(x).getEntry(0));
@@ -124,7 +129,7 @@ public class OPH {
 			break;
 		}
 	}
-	
+	// generating the mini-batches of 200 random samples
 	public static List<Integer> generate_random_samples() {
 		List<Integer> temp = new ArrayList<Integer>();
 		Random rand = new Random();
