@@ -6,5 +6,4 @@
 4) We are using peekaboom dataset which consists of ~58000 images.
 
 # Execution steps
-
-
+The source folder consists of seven java files, we have to execute OPH.java by passing command line arguments 'm' and 'path to the dataset'. Where m corresponds to bit size.
