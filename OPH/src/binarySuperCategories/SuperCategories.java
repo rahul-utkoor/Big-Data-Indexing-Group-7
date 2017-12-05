@@ -12,12 +12,12 @@ import java.util.Set;
 import features.Feature;
 
 public class SuperCategories {
-	public static List<List<Feature> > categories;
-	public static Map<Integer , List<List<Feature> >> binarySuperCategories;
+	public static List<List<Integer> > categories;
+	public static Map<Integer , List<List<Integer> >> binarySuperCategories;
 	
 	public SuperCategories(int index , List<Feature> input_features , int m , int N , int S) {
-		categories = new ArrayList<List<Feature> >();
-		binarySuperCategories = new HashMap<Integer , List<List<Feature> >>();
+		categories = new ArrayList<List<Integer> >();
+		binarySuperCategories = new HashMap<Integer , List<List<Integer> >>();
 		
 		Feature f = input_features.get(index);
 		Map<Integer , Double> sim_scores = new HashMap<Integer , Double>();
@@ -37,37 +37,37 @@ public class SuperCategories {
             }
         } );
 		
-		List<Feature> temp_vec = new ArrayList<Feature>();
+		List<Integer> temp_vec = new ArrayList<Integer>();
 		int counter = 0;
 		int temp_var = (int)(N/(m+1));
 		for(Map.Entry<Integer, Double> entry:list) {
 			if((counter > 0) && (counter % temp_var == 0)) {
 				categories.add(temp_vec);
-				temp_vec = new ArrayList<Feature>();
+				temp_vec = new ArrayList<Integer>();
 			}
-			temp_vec.add(input_features.get(entry.getKey()));
+			temp_vec.add(entry.getKey());
 			counter++;
 		}
 		categories.add(temp_vec);
 		
 		// Building Binary super Categories
 		for(int i = 0 ; i < S ; i++) {
-			List<Feature> temp_arr1 = new ArrayList<Feature>();
-			List<Feature> temp_arr2 = new ArrayList<Feature>();
-			List<List<Feature> > temp_arr3 = new ArrayList<List<Feature> >();
+			List<Integer> temp_arr1 = new ArrayList<Integer>();
+			List<Integer> temp_arr2 = new ArrayList<Integer>();
+			List<List<Integer> > temp_arr3 = new ArrayList<List<Integer> >();
 			for(int j = 0 ; j <= i ; j++) {
-				for(Feature f1 : categories.get(j)) {
+				for(Integer f1 : categories.get(j)) {
 					temp_arr1.add(f1);
 				}
 			}
-			temp_arr3.add(temp_arr1);
+			temp_arr3.add(new ArrayList<Integer>(temp_arr1));
 			temp_arr1.clear();
-			for(int j = i+1 ; j < S ; j++) {
-				for(Feature f1 : categories.get(j)) {
+			for(int j = i+1 ; j < m+1 ; j++) {
+				for(Integer f1 : categories.get(j)) {
 					temp_arr2.add(f1);
 				}
 			}
-			temp_arr3.add(temp_arr2);
+			temp_arr3.add(new ArrayList<Integer>(temp_arr2));
 			temp_arr2.clear();
 			binarySuperCategories.put(i, temp_arr3);
 		}
@@ -90,18 +90,18 @@ public class SuperCategories {
 		for(Double val : sm) {
 			norm += Math.pow(val.doubleValue(), 2);
 		}
-		return norm;
+		return Math.sqrt(norm);
 	}
 	
-	public static List<List<Feature> > getCategories() {
+	public static List<List<Integer> > getCategories() {
 		return categories;
 	}
 	
-	public static Map<Integer , List<List<Feature> > > getBinarySuperCategories() {
+	public static Map<Integer , List<List<Integer> > > getBinarySuperCategories() {
 		return binarySuperCategories;
 	}
 	
-	public List<List<Feature> > getEntry(int index) {
+	public List<List<Integer> > getEntry(int index) {
 		return binarySuperCategories.get(index);
 	}
 

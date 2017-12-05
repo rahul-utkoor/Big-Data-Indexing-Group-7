@@ -1,37 +1,31 @@
 package binarySuperCategories;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import features.Feature;
 
 public class ActiveSets {
-	private static List<Feature> activeset;
-	private static List<Feature> A;
-	private static List<Feature> B;
+	public Map<Integer , List<List<Integer> > > activeset;
+	public static List<Integer> A;
+	public static List<Integer> B;
 	
-	public ActiveSets(int index , int S , List<Integer> I , Map<Integer , SuperCategories > C , Map<Integer , HammingSuperCategories > hC) {
-		for(int i = 0 ; i < S ; i++) {
-//			List<List<Feature> > temp_f1 = C.get(index).getEntry(i);
-//			List<List<Feature> > temp_f2 = hC.get(index).getEntry(i-1);
-//			for(List<Feature> Lf1 : temp_f1) {
-//				for(Feature f1 : Lf1) {
-//					System.out.println(f1.index + " - Hello");
-//					System.out.println(f1.getFeatureVector());
-//					break;
-//				}
-//				break;
-//			}
-//			System.out.println(temp_f1.size() + " , " + temp_f2.size());
-//			this.A = calculateAS(C.get(index).binarySuperCategories.get(i) , hC.get(index).binarySuperCategories.get(i-1));
-//			this.B = calculateAS(hC.get(index).binarySuperCategories.get(i+1) , C.get(index).binarySuperCategories.get(i));
+	public ActiveSets(int index , int S , Map<Integer , SuperCategories > C , Map<Integer , HammingSuperCategories > hC , List<Feature> input_features) {
+		activeset = new HashMap<Integer , List<List<Integer> > >();
+		for(int i = 1 ; i < S-1 ; i++) {
+			List<List<Integer> > temp = new ArrayList<List<Integer> >();
+			A = new ArrayList<Integer>(calculateAS(C.get(index).getEntry(i) , hC.get(index).getEntry(i-1)));
+			B = new ArrayList<Integer>(calculateAS(hC.get(index).getEntry(i+1) , C.get(index).getEntry(i)));
+			temp.add(new ArrayList<Integer>(A));
+			temp.add(new ArrayList<Integer>(B));
+			activeset.put(i, temp);
 		}
 	}
 	
-	public static List<Feature> calculateAS(List<List<Feature> > X , List<List<Feature> >  Y) {
-		List<Feature> temp = new ArrayList<Feature>();
-//		System.out.println(X.size() + " , " + Y.size());
+	public static List<Integer> calculateAS(List<List<Integer> > X , List<List<Integer> >  Y) {
+		List<Integer> temp = new ArrayList<Integer>();
 		for(int i = 0 ; i < X.get(0).size() ; i++) {
 			if(!Y.get(0).contains(X.get(0).get(i))) {
 				temp.add(X.get(0).get(i));

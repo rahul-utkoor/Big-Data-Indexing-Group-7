@@ -16,7 +16,6 @@ public class Feature {
 			values.add(Double.parseDouble(val));
 		}
 	}
-	//getting the feature vectors
 	public List<Double> getFeatureVector() {
 		return values;
 	}
